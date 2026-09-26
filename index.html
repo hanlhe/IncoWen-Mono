@@ -3,60 +3,437 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>WenSolata Mono Web Fonts</title>
+    <meta name="theme-color" content="#f5f2e9">
+    <meta name="description" content="WenSolata Mono is a monospaced typeface combining Inconsolata Latin with LXGW WenKai Mono Lite Chinese glyphs.">
+    <title>WenSolata Mono · 慰文楷</title>
     <link rel="stylesheet" href="./WenSolataMono.css">
     <style>
-      body {
-        max-width: 48rem;
-        margin: 3rem auto;
-        padding: 0 1rem;
+      :root {
+        color-scheme: light;
+        --paper: #f5f2e9;
+        --surface: #fffdf7;
+        --ink: #202922;
+        --muted: #697268;
+        --line: #dcd9ce;
+        --accent: #a33f2f;
+        --sample-size: 24px;
         font-family: "WenSolata Mono", monospace;
-        line-height: 1.6;
+        font-synthesis: none;
       }
-      .sample {
-        font-size: 1.25rem;
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        line-height: 1.65;
       }
-      .sample h2 {
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
+
+      a { color: inherit; }
+
+      .page {
+        width: min(100% - 40px, 1120px);
+        margin-inline: auto;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        min-height: 76px;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 30px;
+        aspect-ratio: 1;
+        place-items: center;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        font-size: 15px;
+      }
+
+      .top-links { display: flex; gap: 22px; color: var(--muted); }
+      .top-links a { text-decoration-thickness: 1px; text-underline-offset: 4px; }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(250px, 0.65fr);
+        align-items: end;
+        gap: 50px;
+        padding-block: clamp(64px, 11vw, 128px) 76px;
+      }
+
+      .eyebrow, .section-kicker, .weight-label {
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
         text-transform: uppercase;
       }
-      .translation {
-        font-family: inherit;
-        font-size: 0.9em;
+
+      h1 {
+        margin: 15px 0 18px;
+        font-size: clamp(44px, 8vw, 92px);
+        font-weight: 400;
+        letter-spacing: -0.045em;
+        line-height: 1.04;
       }
-      .light { font-weight: 300; }
-      .bold { font-weight: 700; }
-      code { overflow-wrap: anywhere; }
+
+      h1 span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.55em;
+        letter-spacing: 0;
+      }
+
+      .intro {
+        max-width: 650px;
+        margin: 0;
+        color: #515b51;
+        font-size: clamp(15px, 1.8vw, 18px);
+      }
+
+      .hero-aside {
+        padding: 19px 0 4px 22px;
+        border-left: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .hero-aside p { margin: 0 0 11px; }
+      .hero-aside strong { color: var(--ink); font-weight: 400; }
+
+      .section {
+        padding-block: 48px 72px;
+        border-top: 1px solid var(--line);
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 28px;
+        margin-bottom: 27px;
+      }
+
+      h2 {
+        margin: 4px 0 0;
+        font-size: clamp(25px, 3.4vw, 38px);
+        font-weight: 400;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+      }
+
+      .size-control {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      input[type="range"] {
+        width: 118px;
+        accent-color: var(--accent);
+      }
+
+      output { min-width: 42px; color: var(--ink); }
+
+      .specimens {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .specimen {
+        min-width: 0;
+        padding: 22px 22px 24px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .specimen.light { font-weight: 300; }
+      .specimen.regular { font-weight: 400; }
+      .specimen.bold { font-weight: 700; }
+
+      .specimen-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .weight-label { margin: 0; }
+      .weight-number { color: var(--muted); font-size: 11px; }
+      .comparison {
+        min-height: 3.4em;
+        margin: 19px 0 21px;
+        font-size: var(--sample-size);
+        letter-spacing: -0.035em;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+      }
+
+      .work-title {
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .quote-zh {
+        margin: 0 0 11px;
+        font-size: 16px;
+        line-height: 1.9;
+      }
+
+      .quote-en {
+        margin: 0;
+        color: #626b61;
+        font-size: 12px;
+        line-height: 1.8;
+      }
+
+      .usage {
+        display: grid;
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+        gap: 48px;
+        align-items: start;
+      }
+
+      .usage-copy { color: var(--muted); font-size: 14px; }
+      .usage-copy p { margin: 13px 0; }
+
+      .code-panel {
+        padding: 20px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .code-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      button, .download-link {
+        min-height: 38px;
+        padding: 8px 12px;
+        border: 1px solid var(--ink);
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 11px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      button:hover, .download-link:hover { background: var(--ink); color: var(--surface); }
+
+      pre {
+        margin: 0;
+        overflow-x: auto;
+        color: var(--ink);
+        font: 12px/1.8 "WenSolata Mono", monospace;
+      }
+
+      .downloads {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .download-link { display: inline-flex; align-items: center; }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px 0 34px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      footer a { text-underline-offset: 3px; }
+
+      @media (max-width: 780px) {
+        .hero { grid-template-columns: 1fr; gap: 28px; }
+        .hero-aside { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 0; border: 0; }
+        .hero-aside p { margin: 0; }
+        .specimens { grid-template-columns: 1fr; }
+        .specimen { padding: 20px; }
+        .comparison { min-height: 0; }
+        .usage { grid-template-columns: 1fr; gap: 22px; }
+      }
+
+      @media (max-width: 520px) {
+        .page { width: min(100% - 28px, 1120px); }
+        .topbar { min-height: 64px; }
+        .top-links { gap: 8px; font-size: 10px; }
+        .section-heading { align-items: start; flex-direction: column; gap: 16px; }
+        .size-control { width: 100%; }
+        input[type="range"] { flex: 1; }
+        footer { flex-direction: column; gap: 6px; }
+      }
     </style>
   </head>
   <body>
-    <main>
-      <h1>WenSolata Mono <span lang="zh-Hans">慰文楷</span></h1>
-      <p>WenSolata Mono is a monospaced font family with Inconsolata Latin glyphs
-        and LXGW WenKai Mono Lite Chinese glyphs.</p>
-      <section class="sample light">
-        <h2>Light — 道德经 · Tao Te Ching</h2>
-        <p lang="zh-Hans">上善若水。水善利万物而不争，处众人之所恶，故几于道。</p>
-        <p class="translation" lang="en">The highest goodness is like water. Water benefits all things without contention, dwelling where others disdain, and thus comes near to the Tao.</p>
-      </section>
-      <section class="sample">
-        <h2>Regular — 逍遥游 · Zhuangzi</h2>
-        <p lang="zh-Hans">北冥有鱼，其名为鲲。化而为鸟，其名为鹏；怒而飞，其翼若垂天之云。</p>
-        <p class="translation" lang="en">In the Northern Ocean there is a fish called Kun. It transforms into a bird called Peng, whose wings in flight are like clouds hanging from the sky.</p>
-      </section>
-      <section class="sample bold">
-        <h2>Bold — 兰亭集序 · Preface to the Orchid Pavilion</h2>
-        <p lang="zh-Hans">是日也，天朗气清，惠风和畅。仰观宇宙之大，俯察品类之盛，所以游目骋怀，信可乐也。</p>
-        <p class="translation" lang="en">The sky was bright, the air clear, and a gentle breeze blew. Looking up at the vastness of the universe and down at the abundance of all things, we let our eyes wander and our thoughts roam freely.</p>
-      </section>
-      <h2>Use the stylesheet</h2>
-      <p>Add this to an HTML document:</p>
-      <pre><code>&lt;link rel="stylesheet" href="https://hanlhe.github.io/WenSolata-Mono/WenSolataMono.css"&gt;</code></pre>
-      <p>Then set <code>font-family: "WenSolata Mono", monospace;</code> in CSS.
-        Use <code>font-weight: 300</code> for Light, <code>400</code> for
-        Regular, or <code>700</code> for Bold.</p>
-      <p><a href="./OFL.txt">SIL Open Font License 1.1</a></p>
-    </main>
+    <div class="page">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="WenSolata Mono home">
+          <span class="brand-mark" lang="zh-Hans">文</span>
+          <span>WenSolata Mono</span>
+        </a>
+        <nav class="top-links" aria-label="Page navigation">
+          <a href="#specimen">Specimen</a>
+          <a href="#use">Use the font</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero" aria-labelledby="page-title">
+          <div>
+            <div class="eyebrow">A monospaced family · Latin + Simplified Chinese</div>
+            <h1 id="page-title">WenSolata Mono<span lang="zh-Hans">慰文楷</span></h1>
+            <p class="intro">Inconsolata’s crisp Latin forms meet the quiet, handwritten character of LXGW WenKai Mono Lite. Three static weights, designed to share the same line.</p>
+          </div>
+          <aside class="hero-aside" aria-label="Font details">
+            <p><strong>3</strong> static weights</p>
+            <p><strong>Inconsolata</strong> Latin</p>
+            <p><strong>WenKai Mono Lite</strong> Chinese</p>
+            <p><strong>OFL 1.1</strong> open license</p>
+          </aside>
+        </section>
+
+        <section class="section" id="specimen" aria-labelledby="specimen-title">
+          <div class="section-heading">
+            <div>
+              <div class="section-kicker">Type specimen</div>
+              <h2 id="specimen-title">One family, three weights.</h2>
+            </div>
+            <label class="size-control" for="sample-size">
+              <span>Sample size</span>
+              <input id="sample-size" type="range" min="18" max="36" value="24" step="1">
+              <output id="sample-size-value" for="sample-size">24 px</output>
+            </label>
+          </div>
+
+          <div class="specimens">
+            <article class="specimen light">
+              <header class="specimen-head">
+                <h3 class="weight-label">Light</h3>
+                <span class="weight-number">300</span>
+              </header>
+              <p class="comparison" lang="zh-Hans">慰文楷 · WenSolata Mono 0123456789</p>
+              <h4 class="work-title">道德经 · Tao Te Ching</h4>
+              <p class="quote-zh" lang="zh-Hans">上善若水。水善利万物而不争，处众人之所恶，故几于道。</p>
+              <p class="quote-en" lang="en">The highest goodness is like water. Water benefits all things without contention, dwelling where others disdain, and thus comes near to the Tao.</p>
+            </article>
+
+            <article class="specimen regular">
+              <header class="specimen-head">
+                <h3 class="weight-label">Regular</h3>
+                <span class="weight-number">400</span>
+              </header>
+              <p class="comparison" lang="zh-Hans">慰文楷 · WenSolata Mono 0123456789</p>
+              <h4 class="work-title">逍遥游 · Zhuangzi</h4>
+              <p class="quote-zh" lang="zh-Hans">北冥有鱼，其名为鲲。化而为鸟，其名为鹏；怒而飞，其翼若垂天之云。</p>
+              <p class="quote-en" lang="en">In the Northern Ocean there is a fish called Kun. It transforms into a bird called Peng, whose wings in flight are like clouds hanging from the sky.</p>
+            </article>
+
+            <article class="specimen bold">
+              <header class="specimen-head">
+                <h3 class="weight-label">Bold</h3>
+                <span class="weight-number">700</span>
+              </header>
+              <p class="comparison" lang="zh-Hans">慰文楷 · WenSolata Mono 0123456789</p>
+              <h4 class="work-title">兰亭集序 · Preface to the Orchid Pavilion</h4>
+              <p class="quote-zh" lang="zh-Hans">是日也，天朗气清，惠风和畅。仰观宇宙之大，俯察品类之盛，所以游目骋怀，信可乐也。</p>
+              <p class="quote-en" lang="en">The sky was bright, the air clear, and a gentle breeze blew. Looking up at the vastness of the universe and down at the abundance of all things, we let our eyes wander and our thoughts roam freely.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section usage" id="use" aria-labelledby="use-title">
+          <div class="usage-copy">
+            <div class="section-kicker">Web fonts</div>
+            <h2 id="use-title">Use WenSolata Mono.</h2>
+            <p>Load the stylesheet once, then choose Light, Regular, or Bold with CSS font weights 300, 400, and 700.</p>
+            <p>The font files and stylesheet are served from GitHub Pages. The family is distributed under the SIL Open Font License 1.1.</p>
+            <div class="downloads" aria-label="Download web fonts">
+              <a class="download-link" href="./woff2/WenSolataMono-Light.woff2" download>Light WOFF2</a>
+              <a class="download-link" href="./woff2/WenSolataMono-Regular.woff2" download>Regular WOFF2</a>
+              <a class="download-link" href="./woff2/WenSolataMono-Bold.woff2" download>Bold WOFF2</a>
+              <a class="download-link" href="./OFL.txt">OFL 1.1</a>
+            </div>
+          </div>
+
+          <div class="code-panel">
+            <div class="code-head">
+              <span>HTML</span>
+              <button id="copy-css" type="button">Copy snippet</button>
+            </div>
+            <pre><code id="css-snippet">&lt;link rel="stylesheet" href="https://hanlhe.github.io/WenSolata-Mono/WenSolataMono.css"&gt;
+
+&lt;style&gt;
+  body {
+    font-family: "WenSolata Mono", monospace;
+    font-weight: 400;
+  }
+&lt;/style&gt;</code></pre>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <span>WenSolata Mono · 慰文楷</span>
+        <span>Inconsolata 3.100 + LXGW WenKai Mono Lite 1.522</span>
+        <a href="https://github.com/hanlhe/WenSolata-Mono">Source and build instructions</a>
+      </footer>
+    </div>
+    <script>
+      const slider = document.querySelector("#sample-size");
+      const sizeOutput = document.querySelector("#sample-size-value");
+      slider.addEventListener("input", () => {
+        document.documentElement.style.setProperty("--sample-size", `${slider.value}px`);
+        sizeOutput.value = `${slider.value} px`;
+        sizeOutput.textContent = `${slider.value} px`;
+      });
+
+      const copyButton = document.querySelector("#copy-css");
+      const snippet = document.querySelector("#css-snippet").textContent;
+      copyButton.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(snippet);
+          copyButton.textContent = "Copied";
+          window.setTimeout(() => { copyButton.textContent = "Copy snippet"; }, 1600);
+        } catch {
+          copyButton.textContent = "Copy unavailable";
+        }
+      });
+    </script>
   </body>
 </html>
