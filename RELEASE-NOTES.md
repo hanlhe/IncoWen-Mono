@@ -10,6 +10,7 @@ Included styles:
 
 - Regular: Inconsolata `wdth=87.5`, `wght=350`.
 - Bold: Inconsolata `wdth=90`, `wght=650`.
+- CJK Regular uses WenKai Mono Lite Regular; CJK Bold uses WenKai Mono Lite Medium.
 - CJK outlines uniformly scaled to 90% horizontally and vertically; terminal advances are unchanged.
 - `dlig` discretionary ligatures.
 

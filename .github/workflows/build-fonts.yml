@@ -25,6 +25,13 @@ jobs:
           path: WenSolata-Mono
           persist-credentials: false
 
+      - name: Check out Pages source
+        uses: actions/checkout@v7
+        with:
+          ref: pages-source
+          path: WenSolata-Pages
+          persist-credentials: false
+
       - name: Check out Inconsolata 3.100
         uses: actions/checkout@v7
         with:
@@ -56,6 +63,8 @@ jobs:
 
       - name: Build WOFF2 web fonts and site
         working-directory: WenSolata-Mono
+        env:
+          WEB_SOURCE: ${{ github.workspace }}/WenSolata-Pages
         run: ./build-webfonts.sh
 
       - name: Configure GitHub Pages
@@ -115,6 +124,12 @@ jobs:
               glyph = font["glyf"][glyph_name]
               assert glyph.xMax - glyph.xMin == expected_width
           assert len(paths) == 2
+          regular = TTFont(paths[0])
+          bold = TTFont(paths[1])
+          regular_cjk = regular.getBestCmap()[0x4E2D]
+          bold_cjk = bold.getBestCmap()[0x4E2D]
+          assert regular_cjk == bold_cjk
+          assert regular["glyf"][regular_cjk].coordinates != bold["glyf"][bold_cjk].coordinates
           PY
 
       - name: Package fonts and licenses

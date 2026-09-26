@@ -10,10 +10,10 @@ Its Simplified Chinese localized family name is **慰文楷**.
 
 ## Styles
 
-| Style | Inconsolata instance |
-| --- | --- |
-| Regular | `wdth=87.5`, `wght=350` |
-| Bold | `wdth=90`, `wght=650` |
+| Style | Inconsolata instance | WenKai Mono Lite source |
+| --- | --- | --- |
+| Regular | `wdth=87.5`, `wght=350` | Regular |
+| Bold | `wdth=90`, `wght=650` | Medium |
 
 The Inconsolata source has no italic files or italic/slant axis, so this family
 does not include Italic or Bold Italic. No synthetic slant is applied.
@@ -41,7 +41,8 @@ font-variant-ligatures: discretionary-ligatures;
 ## Chinese glyph spacing
 
 Han, CJK radicals, and common CJK punctuation outlines are uniformly scaled to
-90%, centered in their cells. This adds space around each character while
+90%, centered in their cells. Regular uses the WenKai Regular outlines; Bold
+uses WenKai Medium outlines. This adds space around each character while
 preserving its proportions. Their 1000-unit advances remain unchanged, so
 terminal column alignment is preserved.
 
@@ -94,7 +95,17 @@ To generate the WOFF2 files and a local copy of the web site, run:
 ./build-webfonts.sh
 ```
 
-This writes the site to `site/` and requires the WOFF2 extra in `requirements.txt`.
+The page templates live on the `pages-source` branch, separate from the font
+sources on `main`. For a local web build, check out that branch and pass its
+directory to the script:
+
+```sh
+git worktree add ../WenSolata-Pages pages-source
+WEB_SOURCE="../WenSolata-Pages" ./build-webfonts.sh
+```
+
+This writes the generated site to `site/` and requires the WOFF2 extra in
+`requirements.txt`.
 
 ## Web fonts
 
@@ -111,7 +122,9 @@ Then use `WenSolata Mono` as the CSS font family. The stylesheet defines weights
 ## Automated build and release
 
 GitHub Actions rebuilds the Regular and Bold fonts from the pinned sources on
-pushes, pull requests, and manual runs. It publishes the WOFF2 files and CSS
+pushes, pull requests, and manual runs. The site templates are kept on
+`pages-source`, and the workflow combines them with the generated WOFF2 files.
+It publishes the WOFF2 files and CSS
 to [GitHub Pages](https://hanlhe.github.io/WenSolata-Mono/) on pushes to `main`,
 and creates a GitHub Release with the TTFs, web fonts, CSS, and `OFL.txt` when
 a `v*` tag is pushed. The first release tag is `v4.622`.

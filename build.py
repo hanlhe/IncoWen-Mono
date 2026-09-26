@@ -18,9 +18,13 @@ INCONSOLATA = (
     ROOT.parent
     / "Inconsolata/fonts/variable/Inconsolata[wdth,wght].ttf"
 )
-WENKAI = (
+WENKAI_REGULAR = (
     ROOT.parent
     / "LxgwWenKai-Lite/fonts/TTF/LXGWWenKaiMonoLite-Regular.ttf"
+)
+WENKAI_MEDIUM = (
+    ROOT.parent
+    / "LxgwWenKai-Lite/fonts/TTF/LXGWWenKaiMonoLite-Medium.ttf"
 )
 FAMILY = "WenSolata Mono"
 FAMILY_ZH = "慰文楷"
@@ -83,7 +87,9 @@ def main():
     if args.output is None:
         args.output = ROOT / "dist" / f"WenSolataMono-{args.style}.ttf"
 
-    base = TTFont(WENKAI)
+    wenkai_style = "Regular" if args.style == "Regular" else "Medium"
+    wenkai_source = WENKAI_REGULAR if args.style == "Regular" else WENKAI_MEDIUM
+    base = TTFont(wenkai_source)
     latin = instantiateVariableFont(
         TTFont(INCONSOLATA),
         latin_axes,
@@ -375,7 +381,8 @@ def main():
     )
     source_description = (
         f"Latin: Inconsolata 3.100 ({axes_description}); "
-        "CJK: LXGW WenKai Mono Lite 1.522 (90% outline scale). "
+        f"CJK: LXGW WenKai Mono Lite {wenkai_style} 1.522 "
+        "(90% outline scale). "
         "Release version 4.622."
     )
     names = {
