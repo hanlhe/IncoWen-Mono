@@ -1,10 +1,10 @@
 # IncoWen Mono
 
 IncoWen Mono combines Inconsolata Latin glyphs with LXGW WenKai Mono Lite
-Chinese glyphs. It provides static Regular and Bold styles. Both styles keep
-the same 500-unit Latin and 1000-unit CJK terminal advances. Inconsolata's
-instanced Latin outlines keep their requested widths and are centered in the
-500-unit cells without horizontal rescaling.
+Chinese glyphs. It provides static Regular and Bold styles with 500-unit Latin
+and 1000-unit CJK advances. Inconsolata's instanced Latin outlines keep their
+requested widths and are centered in the 500-unit cells without horizontal
+rescaling.
 
 ## Styles
 
@@ -81,14 +81,10 @@ pip install -r requirements.txt
 ./build-family.sh
 ```
 
-This writes the two merged fonts to `dist/IncoWenMono-Regular.ttf` and
-`dist/IncoWenMono-Bold.ttf`. In Ghostty, select the family with:
-
-```ini
-font-family = "IncoWen Mono"
-```
-
-These static fonts do not need Ghostty `font-variation` settings.
+This writes `dist/IncoWenMono-Regular.ttf` and
+`dist/IncoWenMono-Bold.ttf`. Install the TTF files with your operating system's
+font manager or include them with an application. The family name is
+`IncoWen Mono`; both weights are static fonts.
 
 ## Automated build and release
 
