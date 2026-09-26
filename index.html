@@ -16,6 +16,15 @@
       .sample {
         font-size: 1.25rem;
       }
+      .sample h2 {
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .translation {
+        font-family: inherit;
+        font-size: 0.9em;
+      }
       .light { font-weight: 300; }
       .bold { font-weight: 700; }
       code { overflow-wrap: anywhere; }
@@ -23,12 +32,24 @@
   </head>
   <body>
     <main>
-      <h1>WenSolata Mono <span lang="zh-Hans">慰文楷</span> Web Fonts</h1>
+      <h1>WenSolata Mono <span lang="zh-Hans">慰文楷</span></h1>
       <p>WenSolata Mono is a monospaced font family with Inconsolata Latin glyphs
         and LXGW WenKai Mono Lite Chinese glyphs.</p>
-      <p class="sample light">Light: The quick brown fox jumps over 1234567890. 中文示例。</p>
-      <p class="sample">Regular: The quick brown fox jumps over 1234567890. 中文示例。</p>
-      <p class="sample bold">Bold: The quick brown fox jumps over 1234567890. 中文示例。</p>
+      <section class="sample light">
+        <h2>Light — 道德经 · Tao Te Ching</h2>
+        <p lang="zh-Hans">上善若水。水善利万物而不争，处众人之所恶，故几于道。</p>
+        <p class="translation" lang="en">The highest goodness is like water. Water benefits all things without contention, dwelling where others disdain, and thus comes near to the Tao.</p>
+      </section>
+      <section class="sample">
+        <h2>Regular — 逍遥游 · Zhuangzi</h2>
+        <p lang="zh-Hans">北冥有鱼，其名为鲲。化而为鸟，其名为鹏；怒而飞，其翼若垂天之云。</p>
+        <p class="translation" lang="en">In the Northern Ocean there is a fish called Kun. It transforms into a bird called Peng, whose wings in flight are like clouds hanging from the sky.</p>
+      </section>
+      <section class="sample bold">
+        <h2>Bold — 兰亭集序 · Preface to the Orchid Pavilion</h2>
+        <p lang="zh-Hans">是日也，天朗气清，惠风和畅。仰观宇宙之大，俯察品类之盛，所以游目骋怀，信可乐也。</p>
+        <p class="translation" lang="en">The sky was bright, the air clear, and a gentle breeze blew. Looking up at the vastness of the universe and down at the abundance of all things, we let our eyes wander and our thoughts roam freely.</p>
+      </section>
       <h2>Use the stylesheet</h2>
       <p>Add this to an HTML document:</p>
       <pre><code>&lt;link rel="stylesheet" href="https://hanlhe.github.io/WenSolata-Mono/WenSolataMono.css"&gt;</code></pre>
