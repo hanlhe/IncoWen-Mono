@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a static Inconsolata + WenKai Mono Lite TTF."""
+"""Build WenSolata Mono from Inconsolata and WenKai Mono Lite."""
 
 import argparse
 from collections import Counter
@@ -22,11 +22,12 @@ WENKAI = (
     ROOT.parent
     / "LxgwWenKai-Lite/fonts/TTF/LXGWWenKaiMonoLite-Regular.ttf"
 )
-FAMILY = "IncoWen Mono"
-PROJECT_URL = "https://github.com/hanlhe/IncoWen-Mono"
+FAMILY = "WenSolata Mono"
+FAMILY_ZH = "慰文楷"
+PROJECT_URL = "https://github.com/hanlhe/WenSolata-Mono"
 OFL_URL = "https://openfontlicense.org/open-font-license-official-text/"
-PREFIX = "IWInco_"
-LIGATURE_PREFIX = "IWLig_"
+PREFIX = "WSWen_"
+LIGATURE_PREFIX = "WSLig_"
 LATIN_ADVANCE = 500
 COMBINING_MARKS = range(0x0300, 0x0370)
 
@@ -55,6 +56,11 @@ def set_english_name(font, name_id, value):
     name_table.setName(value, name_id, 3, 1, 0x0409)
 
 
+def set_simplified_chinese_name(font, name_id, value):
+    """Add the Simplified Chinese Windows Unicode name record."""
+    font["name"].setName(value, name_id, 3, 1, 0x0804)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cjk-scale-x", type=float, default=1.0)
@@ -75,7 +81,7 @@ def main():
         else {"wdth": 90, "wght": 650}
     )
     if args.output is None:
-        args.output = ROOT / "dist" / f"IncoWenMono-{args.style}.ttf"
+        args.output = ROOT / "dist" / f"WenSolataMono-{args.style}.ttf"
 
     base = TTFont(WENKAI)
     latin = instantiateVariableFont(
@@ -380,7 +386,7 @@ def main():
         4: f"{FAMILY} {args.style}",
         5: "Version 4.622",
         6: FAMILY.replace(" ", "") + f"-{args.style}",
-        8: "IncoWen Mono Project",
+        8: "WenSolata Mono Project",
         9: "Hanlin He; Inconsolata Project Authors; LXGW; Klee Project Authors",
         10: source_description,
         11: PROJECT_URL,
@@ -392,12 +398,21 @@ def main():
     }
     for name_id, value in names.items():
         set_english_name(base, name_id, value)
+    localized_names = {
+        1: FAMILY_ZH,
+        2: "常规" if args.style == "Regular" else "粗体",
+        4: f"{FAMILY_ZH} {'常规' if args.style == 'Regular' else '粗体'}",
+        16: FAMILY_ZH,
+        17: "常规" if args.style == "Regular" else "粗体",
+    }
+    for name_id, value in localized_names.items():
+        set_simplified_chinese_name(base, name_id, value)
     base["head"].fontRevision = 4.622
     if args.style == "Bold":
         base["head"].macStyle |= 1
     else:
         base["head"].macStyle &= ~1
-    base["OS/2"].achVendID = "IWKM"
+    base["OS/2"].achVendID = "WSMT"
     base["OS/2"].usWeightClass = 700 if args.style == "Bold" else 400
     base["OS/2"].fsSelection &= ~((1 << 5) | (1 << 6))
     base["OS/2"].fsSelection |= 1 << (5 if args.style == "Bold" else 6)

@@ -1,10 +1,12 @@
-# IncoWen Mono
+# WenSolata Mono
 
-IncoWen Mono combines Inconsolata Latin glyphs with LXGW WenKai Mono Lite
+WenSolata Mono combines Inconsolata Latin glyphs with LXGW WenKai Mono Lite
 Chinese glyphs. It provides static Regular and Bold styles with 500-unit Latin
 and 1000-unit CJK advances. Inconsolata's instanced Latin outlines keep their
 requested widths and are centered in the 500-unit cells without horizontal
 rescaling.
+
+Its Simplified Chinese localized family name is **慰文楷**.
 
 ## Styles
 
@@ -57,15 +59,15 @@ The `dlng` and `slng` tags are described in the
 
 ## License
 
-IncoWen Mono and its modified font files are distributed under the SIL Open
+WenSolata Mono and its modified font files are distributed under the SIL Open
 Font License 1.1. You may use, modify, embed, and redistribute them, including
 commercially, provided you do not sell the font files by themselves, keep the
 copyright and license notices, and release modified font files under OFL 1.1.
 The WenKai source reserves `LXGW` and several Chinese names; this derivative
-uses the distinct family name `IncoWen Mono`. The combined license and notices
-are in [`OFL.txt`](OFL.txt), which includes both upstream copyright and
-reserved-name notices. The build embeds the copyright notice and full OFL text
-in each font's metadata.
+uses the distinct family names `WenSolata Mono` and `慰文楷`. The combined
+license and notices are in [`OFL.txt`](OFL.txt), which includes both upstream
+copyright and reserved-name notices. The build embeds the copyright notice and
+full OFL text in each font's metadata.
 
 See the [official OFL FAQ](https://openfontlicense.org/ofl-faq/) for details.
 
@@ -81,10 +83,10 @@ pip install -r requirements.txt
 ./build-family.sh
 ```
 
-This writes `dist/IncoWenMono-Regular.ttf` and
-`dist/IncoWenMono-Bold.ttf`. Install the TTF files with your operating system's
+This writes `dist/WenSolataMono-Regular.ttf` and
+`dist/WenSolataMono-Bold.ttf`. Install the TTF files with your operating system's
 font manager or include them with an application. The family name is
-`IncoWen Mono`; both weights are static fonts.
+`WenSolata Mono`; both weights are static fonts.
 
 To generate the WOFF2 files and a local copy of the web site, run:
 
@@ -99,18 +101,18 @@ This writes the site to `site/` and requires the WOFF2 extra in `requirements.tx
 The regular and bold web fonts are WOFF2 files. Include the hosted stylesheet:
 
 ```html
-<link rel="stylesheet" href="https://hanlhe.github.io/IncoWen-Mono/IncoWenMono.css">
+<link rel="stylesheet" href="https://hanlhe.github.io/WenSolata-Mono/WenSolataMono.css">
 ```
 
-Then use `IncoWen Mono` as the CSS font family. The stylesheet defines weights
+Then use `WenSolata Mono` as the CSS font family. The stylesheet defines weights
 400 and 700. The web font files and `OFL.txt` are available in the
-[GitHub Pages site](https://hanlhe.github.io/IncoWen-Mono/).
+[GitHub Pages site](https://hanlhe.github.io/WenSolata-Mono/).
 
 ## Automated build and release
 
 GitHub Actions rebuilds the Regular and Bold fonts from the pinned sources on
 pushes, pull requests, and manual runs. It publishes the WOFF2 files and CSS
-to [GitHub Pages](https://hanlhe.github.io/IncoWen-Mono/) on pushes to `main`,
+to [GitHub Pages](https://hanlhe.github.io/WenSolata-Mono/) on pushes to `main`,
 and creates a GitHub Release with the TTFs, web fonts, CSS, and `OFL.txt` when
 a `v*` tag is pushed. The first release tag is `v4.622`.
 
