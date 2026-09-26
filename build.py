@@ -23,6 +23,8 @@ WENKAI = (
     / "LxgwWenKai-Lite/fonts/TTF/LXGWWenKaiMonoLite-Regular.ttf"
 )
 FAMILY = "IncoWen Mono"
+PROJECT_URL = "https://github.com/hanlhe/IncoWen-Mono"
+OFL_URL = "https://openfontlicense.org/open-font-license-official-text/"
 PREFIX = "IWInco_"
 LIGATURE_PREFIX = "IWLig_"
 LATIN_ADVANCE = 500
@@ -56,6 +58,7 @@ def set_english_name(font, name_id, value):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cjk-scale-x", type=float, default=1.0)
+    parser.add_argument("--cjk-scale-y", type=float, default=1.0)
     parser.add_argument(
         "--style", choices=("Regular", "Bold"), default="Regular"
     )
@@ -63,6 +66,8 @@ def main():
     args = parser.parse_args()
     if not 0 < args.cjk_scale_x <= 1:
         parser.error("--cjk-scale-x must be greater than 0 and at most 1")
+    if not 0 < args.cjk_scale_y <= 1:
+        parser.error("--cjk-scale-y must be greater than 0 and at most 1")
 
     latin_axes = (
         {"wdth": 87.5, "wght": 350}
@@ -79,9 +84,9 @@ def main():
         inplace=True,
     )
 
-    # This optional optical-spacing variant narrows Han and CJK punctuation
-    # outlines around the center of their full-width cells. Their 1000-unit
-    # advances stay unchanged, keeping terminal columns aligned.
+    # Scale Han and CJK punctuation outlines around the center of their
+    # full-width cells. Their 1000-unit advances stay unchanged, keeping
+    # terminal columns aligned.
     cjk_glyph_names = {
         glyph_name
         for cp, glyph_name in base.getBestCmap().items()
@@ -89,20 +94,29 @@ def main():
         and base["hmtx"].metrics[glyph_name][0] >= 800
     }
     cjk_scaled = 0
-    if args.cjk_scale_x != 1.0:
+    if args.cjk_scale_x != 1.0 or args.cjk_scale_y != 1.0:
         original_glyph_set = base.getGlyphSet()
         glyf = base["glyf"]
         hmtx = base["hmtx"].metrics
         em = base["head"].unitsPerEm
         x_offset = (1 - args.cjk_scale_x) * em / 2
+        y_offset = (1 - args.cjk_scale_y) * em / 2
+        vmtx = base["vmtx"].metrics if "vmtx" in base else None
+        vertical_origins = {}
         replacements = {}
         for glyph_name in cjk_glyph_names:
+            if vmtx is not None:
+                original_glyph = glyf[glyph_name]
+                original_glyph.recalcBounds(glyf)
+                vertical_origins[glyph_name] = (
+                    original_glyph.yMax + vmtx[glyph_name][1]
+                )
             recording_pen = DecomposingRecordingPen(original_glyph_set)
             original_glyph_set[glyph_name].draw(recording_pen)
             pen = TTGlyphPen(None)
             recording_pen.replay(TransformPen(
                 pen,
-                (args.cjk_scale_x, 0, 0, 1, x_offset, 0),
+                (args.cjk_scale_x, 0, 0, args.cjk_scale_y, x_offset, y_offset),
             ))
             replacements[glyph_name] = pen.glyph()
         for glyph_name, glyph in replacements.items():
@@ -110,6 +124,12 @@ def main():
             glyf.glyphs[glyph_name] = glyph
             advance, _ = hmtx[glyph_name]
             hmtx[glyph_name] = (advance, glyph.xMin or 0)
+            if vmtx is not None:
+                vertical_advance, _ = vmtx[glyph_name]
+                vmtx[glyph_name] = (
+                    vertical_advance,
+                    vertical_origins[glyph_name] - glyph.yMax,
+                )
         cjk_scaled = len(replacements)
 
     base_cmap = base.getBestCmap()
@@ -336,19 +356,41 @@ def main():
     if "DSIG" in base:
         del base["DSIG"]
 
+    copyright_notice = (
+        "Copyright 2006 The Inconsolata Project Authors.\n"
+        "Copyright 2020 The Klee Project Authors.\n"
+        "Copyright 2021-2026 LXGW.\n"
+        "Copyright 2026 Hanlin He (font integration and modifications)."
+    )
+    axes_description = ", ".join(
+        f"{axis}={value}" for axis, value in latin_axes.items()
+    )
+    source_description = (
+        f"Latin: Inconsolata 3.100 ({axes_description}); "
+        "CJK: LXGW WenKai Mono Lite 1.522 (90% outline scale). "
+        "Release version 4.622."
+    )
     names = {
+        0: copyright_notice,
         1: FAMILY,
         2: args.style,
-        3: f"{FAMILY} {args.style} 1.0",
+        3: f"{FAMILY} {args.style} 4.622",
         4: f"{FAMILY} {args.style}",
-        5: "Version 1.0",
+        5: "Version 4.622",
         6: FAMILY.replace(" ", "") + f"-{args.style}",
+        8: "IncoWen Mono Project",
+        9: "Hanlin He; Inconsolata Project Authors; LXGW; Klee Project Authors",
+        10: source_description,
+        11: PROJECT_URL,
+        12: PROJECT_URL,
+        13: (ROOT / "OFL.txt").read_text(encoding="utf-8").strip(),
+        14: OFL_URL,
         16: FAMILY,
         17: args.style,
     }
     for name_id, value in names.items():
         set_english_name(base, name_id, value)
-    base["head"].fontRevision = 1.0
+    base["head"].fontRevision = 4.622
     if args.style == "Bold":
         base["head"].macStyle |= 1
     else:
@@ -373,7 +415,8 @@ def main():
         f"Latin advances are {LATIN_ADVANCE}/{base['head'].unitsPerEm} em "
         f"(scaled {scale_x:.3f}x horizontally). "
         f"Scaled {cjk_scaled} Chinese glyph outlines "
-        f"({args.cjk_scale_x:.3f}x horizontally); their advances are unchanged."
+        f"({args.cjk_scale_x:.3f}x horizontally and "
+        f"{args.cjk_scale_y:.3f}x vertically); their advances are unchanged."
     )
 
 

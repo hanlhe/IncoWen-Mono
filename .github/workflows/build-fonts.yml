@@ -1,0 +1,134 @@
+name: Build IncoWen Mono
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      package_name: ${{ steps.package.outputs.name }}
+    steps:
+      - name: Check out IncoWen Mono
+        uses: actions/checkout@v7
+        with:
+          path: IncoWen-Mono
+          persist-credentials: false
+
+      - name: Check out Inconsolata 3.100
+        uses: actions/checkout@v7
+        with:
+          repository: cyrealtype/Inconsolata
+          ref: fc1fc21081558b39a2db43bfd9b65bf9acb50701
+          path: Inconsolata
+          persist-credentials: false
+
+      - name: Check out LXGW WenKai Mono Lite 1.522
+        uses: actions/checkout@v7
+        with:
+          repository: lxgw/LxgwWenKai-Lite
+          ref: 4cddacbe244b0a24b10076369105f0495e5ec898
+          path: LxgwWenKai-Lite
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install build dependency
+        working-directory: IncoWen-Mono
+        run: python -m pip install -r requirements.txt
+
+      - name: Build Regular and Bold fonts
+        working-directory: IncoWen-Mono
+        run: ./build-family.sh
+
+      - name: Check font metadata and metrics
+        working-directory: IncoWen-Mono
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from fontTools.ttLib import TTFont
+
+          paths = [
+              Path("dist/IncoWenMono-Regular.ttf"),
+              Path("dist/IncoWenMono-Bold.ttf"),
+          ]
+          for path in paths:
+              font = TTFont(path, checkChecksums=2)
+              names = font["name"]
+              cmap = font.getBestCmap()
+              os2 = font["OS/2"]
+              assert names.getDebugName(1) == "IncoWen Mono"
+              assert names.getDebugName(0) and "Inconsolata" in names.getDebugName(0)
+              assert "wght=" in names.getDebugName(10) and "wdth=" in names.getDebugName(10)
+              assert "SIL OPEN FONT LICENSE Version 1.1" in names.getDebugName(13)
+              assert "fvar" not in font
+              assert font["hmtx"].metrics[cmap[0x41]][0] == 500
+              assert font["hmtx"].metrics[cmap[0x4E2D]][0] == 1000
+              assert os2.ulCodePageRange1 & (1 << 18)
+              assert not os2.ulCodePageRange1 & (1 << 20)
+              assert any(
+                  record.FeatureTag == "dlig"
+                  for record in font["GSUB"].table.FeatureList.FeatureRecord
+              )
+          assert len(paths) == 2
+          PY
+
+      - name: Package fonts and licenses
+        id: package
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            name="IncoWenMono-${GITHUB_REF_NAME}.zip"
+          else
+            name="IncoWenMono-${GITHUB_SHA:0:7}.zip"
+          fi
+          cd IncoWen-Mono
+          zip -r "../$name" \
+            OFL.txt LICENSE-Inconsolata.txt LICENSE-WenKai-Lite.txt \
+            dist/IncoWenMono-Regular.ttf dist/IncoWenMono-Bold.ttf
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: incowen-font-package
+          path: ${{ steps.package.outputs.name }}
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out release notes
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download font package
+        uses: actions/download-artifact@v8
+        with:
+          name: incowen-font-package
+          path: release-assets
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PACKAGE_NAME: ${{ needs.build.outputs.package_name }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "release-assets/$PACKAGE_NAME" \
+            --title "IncoWen Mono $GITHUB_REF_NAME" \
+            --notes-file RELEASE-NOTES.md
