@@ -1,8 +1,8 @@
 # WenSolata Mono
 
 WenSolata Mono combines Inconsolata Latin glyphs with LXGW WenKai Mono Lite
-Chinese glyphs. It provides static Regular and Bold styles with 500-unit Latin
-and 1000-unit CJK advances. Inconsolata's instanced Latin outlines keep their
+Chinese glyphs. It provides static Light, Regular, and Bold styles with
+500-unit Latin and 1000-unit CJK advances. Inconsolata's instanced Latin outlines keep their
 requested widths and are centered in the 500-unit cells without horizontal
 rescaling.
 
@@ -12,6 +12,7 @@ Its Simplified Chinese localized family name is **慰文楷**.
 
 | Style | Inconsolata instance | WenKai Mono Lite source |
 | --- | --- | --- |
+| Light | `wdth=87.5`, `wght=300` | Light |
 | Regular | `wdth=87.5`, `wght=350` | Regular |
 | Bold | `wdth=90`, `wght=650` | Medium |
 
@@ -41,10 +42,10 @@ font-variant-ligatures: discretionary-ligatures;
 ## Chinese glyph spacing
 
 Han, CJK radicals, and common CJK punctuation outlines are uniformly scaled to
-90%, centered in their cells. Regular uses the WenKai Regular outlines; Bold
-uses WenKai Medium outlines. This adds space around each character while
-preserving its proportions. Their 1000-unit advances remain unchanged, so
-terminal column alignment is preserved.
+90%, centered in their cells. Light and Regular use the corresponding WenKai
+outlines; Bold uses WenKai Medium outlines. This adds space around each
+character while preserving its proportions. Their 1000-unit advances remain
+unchanged, so terminal column alignment is preserved.
 
 ## Chinese language metadata
 
@@ -75,7 +76,7 @@ See the [official OFL FAQ](https://openfontlicense.org/ofl-faq/) for details.
 ## Build
 
 The build uses the sibling `Inconsolata` and `LxgwWenKai-Lite` checkouts.
-Install the dependency and build both standard weights:
+Install the dependency and build all three weights:
 
 ```sh
 python3 -m venv .venv
@@ -84,16 +85,10 @@ pip install -r requirements.txt
 ./build-family.sh
 ```
 
-This writes `dist/WenSolataMono-Regular.ttf` and
-`dist/WenSolataMono-Bold.ttf`. Install the TTF files with your operating system's
-font manager or include them with an application. The family name is
-`WenSolata Mono`; both weights are static fonts.
-
-To generate the WOFF2 files and a local copy of the web site, run:
-
-```sh
-./build-webfonts.sh
-```
+This writes `dist/WenSolataMono-Light.ttf`, `dist/WenSolataMono-Regular.ttf`,
+and `dist/WenSolataMono-Bold.ttf`. Install the TTF files with your operating
+system's font manager or include them with an application. The family name is
+`WenSolata Mono`; all three styles are static fonts.
 
 The page templates live on the `pages-source` branch, separate from the font
 sources on `main`. For a local web build, check out that branch and pass its
@@ -109,19 +104,19 @@ This writes the generated site to `site/` and requires the WOFF2 extra in
 
 ## Web fonts
 
-The regular and bold web fonts are WOFF2 files. Include the hosted stylesheet:
+The Light, Regular, and Bold web fonts are WOFF2 files. Include the hosted stylesheet:
 
 ```html
 <link rel="stylesheet" href="https://hanlhe.github.io/WenSolata-Mono/WenSolataMono.css">
 ```
 
 Then use `WenSolata Mono` as the CSS font family. The stylesheet defines weights
-400 and 700. The web font files and `OFL.txt` are available in the
+300, 400, and 700. The web font files and `OFL.txt` are available in the
 [GitHub Pages site](https://hanlhe.github.io/WenSolata-Mono/).
 
 ## Automated build and release
 
-GitHub Actions rebuilds the Regular and Bold fonts from the pinned sources on
+GitHub Actions rebuilds the Light, Regular, and Bold fonts from the pinned sources on
 pushes, pull requests, and manual runs. The site templates are kept on
 `pages-source`, and the workflow combines them with the generated WOFF2 files.
 It publishes the WOFF2 files and CSS

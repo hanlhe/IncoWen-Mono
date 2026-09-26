@@ -22,6 +22,10 @@ WENKAI_REGULAR = (
     ROOT.parent
     / "LxgwWenKai-Lite/fonts/TTF/LXGWWenKaiMonoLite-Regular.ttf"
 )
+WENKAI_LIGHT = (
+    ROOT.parent
+    / "LxgwWenKai-Lite/fonts/TTF/LXGWWenKaiMonoLite-Light.ttf"
+)
 WENKAI_MEDIUM = (
     ROOT.parent
     / "LxgwWenKai-Lite/fonts/TTF/LXGWWenKaiMonoLite-Medium.ttf"
@@ -70,7 +74,7 @@ def main():
     parser.add_argument("--cjk-scale-x", type=float, default=1.0)
     parser.add_argument("--cjk-scale-y", type=float, default=1.0)
     parser.add_argument(
-        "--style", choices=("Regular", "Bold"), default="Regular"
+        "--style", choices=("Light", "Regular", "Bold"), default="Regular"
     )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
@@ -79,16 +83,19 @@ def main():
     if not 0 < args.cjk_scale_y <= 1:
         parser.error("--cjk-scale-y must be greater than 0 and at most 1")
 
-    latin_axes = (
-        {"wdth": 87.5, "wght": 350}
-        if args.style == "Regular"
-        else {"wdth": 90, "wght": 650}
-    )
+    latin_axes = {
+        "Light": {"wdth": 87.5, "wght": 300},
+        "Regular": {"wdth": 87.5, "wght": 350},
+        "Bold": {"wdth": 90, "wght": 650},
+    }[args.style]
     if args.output is None:
         args.output = ROOT / "dist" / f"WenSolataMono-{args.style}.ttf"
 
-    wenkai_style = "Regular" if args.style == "Regular" else "Medium"
-    wenkai_source = WENKAI_REGULAR if args.style == "Regular" else WENKAI_MEDIUM
+    wenkai_style, wenkai_source = {
+        "Light": ("Light", WENKAI_LIGHT),
+        "Regular": ("Regular", WENKAI_REGULAR),
+        "Bold": ("Medium", WENKAI_MEDIUM),
+    }[args.style]
     base = TTFont(wenkai_source)
     latin = instantiateVariableFont(
         TTFont(INCONSOLATA),
@@ -405,12 +412,17 @@ def main():
     }
     for name_id, value in names.items():
         set_english_name(base, name_id, value)
+    style_zh = {"Light": "细体", "Regular": "常规", "Bold": "粗体"}[
+        args.style
+    ]
     localized_names = {
         1: FAMILY_ZH,
-        2: "常规" if args.style == "Regular" else "粗体",
-        4: f"{FAMILY_ZH} {'常规' if args.style == 'Regular' else '粗体'}",
+        2: style_zh,
+        4: f"{FAMILY_ZH} {style_zh}",
         16: FAMILY_ZH,
-        17: "常规" if args.style == "Regular" else "粗体",
+        17: {"Light": "细体", "Regular": "常规", "Bold": "粗体"}[
+            args.style
+        ],
     }
     for name_id, value in localized_names.items():
         set_simplified_chinese_name(base, name_id, value)
@@ -420,9 +432,14 @@ def main():
     else:
         base["head"].macStyle &= ~1
     base["OS/2"].achVendID = "WSMT"
-    base["OS/2"].usWeightClass = 700 if args.style == "Bold" else 400
+    base["OS/2"].usWeightClass = {
+        "Light": 300, "Regular": 400, "Bold": 700
+    }[args.style]
     base["OS/2"].fsSelection &= ~((1 << 5) | (1 << 6))
-    base["OS/2"].fsSelection |= 1 << (5 if args.style == "Bold" else 6)
+    if args.style == "Bold":
+        base["OS/2"].fsSelection |= 1 << 5
+    elif args.style == "Regular":
+        base["OS/2"].fsSelection |= 1 << 6
     # WenKai marks both legacy Chinese code pages as functional. This family
     # uses its Simplified Chinese glyph forms, so advertise Simplified only.
     base["OS/2"].ulCodePageRange1 |= 1 << 18

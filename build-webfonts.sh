@@ -22,7 +22,7 @@ shutil.copytree(web_source, site, ignore=shutil.ignore_patterns(".DS_Store"))
 shutil.copy2(root / "OFL.txt", site / "OFL.txt")
 (site / "woff2").mkdir(parents=True, exist_ok=True)
 
-for style in ("Regular", "Bold"):
+for style in ("Light", "Regular", "Bold"):
     source = root / "dist" / f"WenSolataMono-{style}.ttf"
     output = site / "woff2" / f"WenSolataMono-{style}.woff2"
     woff2.compress(str(source), str(output))
