@@ -69,32 +69,9 @@ the standard fonts can be selected with:
 font-family = "IncoWen Mono"
 ```
 
-The separate Nerd Font patch uses the family name `IncoWenMono Nerd Font`.
 These static fonts do not need Ghostty `font-variation` settings.
 
 WenKai's combining diacritics, variation sequence data, vertical metrics, and
 OpenType layout tables are retained. Inconsolata's `dlig` feature is merged
-into each style.
-
-## Nerd Font variants
-
-The Nerd Font outputs are separate from the standard fonts. They include the
-complete Nerd Fonts glyph set, including Braille. To build them, install
-FontForge and clone the tested Nerd Fonts revision:
-
-```sh
-git clone https://github.com/ryanoasis/nerd-fonts.git /tmp/nerd-fonts
-git -C /tmp/nerd-fonts checkout 33db50390a1b173e6f19ecc2119248d2ec166a11
-NERD_FONTS_REPO=/tmp/nerd-fonts ./build-nerd-font.sh
-NERD_FONTS_REPO=/tmp/nerd-fonts ./build-cjk90-nerd-font.sh
-```
-
-Each script builds Regular and Bold. Standard outputs are in `dist/nerd/`; the
-spacing variant is in `dist/cjk90/nerd/`.
-
-Third-party license texts are in `NerdFonts-Glyph-Licenses/`. The Nerd Fonts
-license and license audit are in `LICENSE-Nerd-Fonts.txt` and
-`NerdFonts-license-audit.md`. The audit notes that Font Logos has no declared
-license; review its terms before redistributing the complete Nerd Font files.
-The source font licenses are `LICENSE-Inconsolata.txt` and
+into each style. The source font licenses are `LICENSE-Inconsolata.txt` and
 `LICENSE-WenKai-Lite.txt`.
