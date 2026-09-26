@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "IncoWen Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./woff2/IncoWenMono-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IncoWen Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./woff2/IncoWenMono-Bold.woff2") format("woff2");
+}
+
+.incowen-dlig {
+  font-variant-ligatures: discretionary-ligatures;
+}

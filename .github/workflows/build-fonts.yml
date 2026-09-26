@@ -13,6 +13,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
     outputs:
       package_name: ${{ steps.package.outputs.name }}
     steps:
@@ -50,6 +53,14 @@ jobs:
       - name: Build Regular and Bold fonts
         working-directory: IncoWen-Mono
         run: ./build-family.sh
+
+      - name: Build WOFF2 web fonts and site
+        working-directory: IncoWen-Mono
+        run: ./build-webfonts.sh
+
+      - name: Configure GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v5
 
       - name: Check font metadata and metrics
         working-directory: IncoWen-Mono
@@ -113,7 +124,8 @@ jobs:
           cd IncoWen-Mono
           zip -r "../$name" \
             OFL.txt \
-            dist/IncoWenMono-Regular.ttf dist/IncoWenMono-Bold.ttf
+            dist/IncoWenMono-Regular.ttf dist/IncoWenMono-Bold.ttf \
+            site/IncoWenMono.css site/woff2
           echo "name=$name" >> "$GITHUB_OUTPUT"
 
       - name: Upload build artifact
@@ -123,6 +135,12 @@ jobs:
           path: ${{ steps.package.outputs.name }}
           if-no-files-found: error
           retention-days: 30
+
+      - name: Upload GitHub Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: IncoWen-Mono/site
 
   release:
     if: startsWith(github.ref, 'refs/tags/v')
@@ -151,3 +169,19 @@ jobs:
             "release-assets/$PACKAGE_NAME" \
             --title "IncoWen Mono $GITHUB_REF_NAME" \
             --notes-file RELEASE-NOTES.md
+
+  deploy-pages:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy web fonts
+        id: deployment
+        uses: actions/deploy-pages@v4

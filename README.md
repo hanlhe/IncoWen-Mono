@@ -29,8 +29,8 @@ The combined release version is their sum (`3.100 + 1.522 = 4.622`), following
 the convention used by [LXGW Bright Code](https://github.com/lxgw/LxgwBright-Code).
 The first release tag is `v4.622`.
 
-Discretionary ligatures are included as the `dlig` feature. Enable discretionary
-ligatures in your editor to use them. For CSS:
+Discretionary ligatures are included as the `dlig` feature. Enable them in the
+application that renders the font. For CSS:
 
 ```css
 font-variant-ligatures: discretionary-ligatures;
@@ -86,12 +86,33 @@ This writes `dist/IncoWenMono-Regular.ttf` and
 font manager or include them with an application. The family name is
 `IncoWen Mono`; both weights are static fonts.
 
+To generate the WOFF2 files and a local copy of the web site, run:
+
+```sh
+./build-webfonts.sh
+```
+
+This writes the site to `site/` and requires the WOFF2 extra in `requirements.txt`.
+
+## Web fonts
+
+The regular and bold web fonts are WOFF2 files. Include the hosted stylesheet:
+
+```html
+<link rel="stylesheet" href="https://hanlhe.github.io/IncoWen-Mono/IncoWenMono.css">
+```
+
+Then use `IncoWen Mono` as the CSS font family. The stylesheet defines weights
+400 and 700. The web font files and `OFL.txt` are available in the
+[GitHub Pages site](https://hanlhe.github.io/IncoWen-Mono/).
+
 ## Automated build and release
 
-GitHub Actions rebuilds the Regular and Bold TTFs from the pinned sources on
-pushes, pull requests, and manual runs, then uploads a ZIP artifact containing
-the fonts and `OFL.txt`. Pushing a `v*` tag creates a GitHub Release with
-that ZIP. The first release tag is `v4.622`.
+GitHub Actions rebuilds the Regular and Bold fonts from the pinned sources on
+pushes, pull requests, and manual runs. It publishes the WOFF2 files and CSS
+to [GitHub Pages](https://hanlhe.github.io/IncoWen-Mono/) on pushes to `main`,
+and creates a GitHub Release with the TTFs, web fonts, CSS, and `OFL.txt` when
+a `v*` tag is pushed. The first release tag is `v4.622`.
 
 WenKai's combining diacritics, variation sequence data, vertical metrics, and
 OpenType layout tables are retained. Inconsolata's `dlig` feature is merged
