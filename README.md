@@ -42,10 +42,11 @@ font-variant-ligatures: discretionary-ligatures;
 ## Chinese glyph spacing
 
 Han, CJK radicals, and common CJK punctuation outlines are uniformly scaled to
-90%, centered in their cells. Light and Regular use the corresponding WenKai
-outlines; Bold uses WenKai Medium outlines. This adds space around each
-character while preserving its proportions. Their 1000-unit advances remain
-unchanged, so terminal column alignment is preserved.
+90%. They are centered horizontally in their cells, while vertical scaling is
+anchored at the baseline to keep their position aligned with Latin text. Light
+and Regular use the corresponding WenKai outlines; Bold uses WenKai Medium
+outlines. Their 1000-unit advances remain unchanged, so terminal column
+alignment is preserved.
 
 ## Chinese language metadata
 

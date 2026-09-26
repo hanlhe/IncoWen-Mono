@@ -12,7 +12,7 @@ Included styles:
 - Light: Inconsolata `wdth=87.5`, `wght=300`.
 - Bold: Inconsolata `wdth=90`, `wght=650`.
 - CJK Light and Regular use the corresponding WenKai Mono Lite styles; CJK Bold uses WenKai Mono Lite Medium.
-- CJK outlines uniformly scaled to 90% horizontally and vertically; terminal advances are unchanged.
+- CJK outlines uniformly scaled to 90%, centered horizontally and scaled from the baseline vertically; terminal advances are unchanged.
 - `dlig` discretionary ligatures.
 
 The fonts and source notices are distributed under SIL Open Font License 1.1.

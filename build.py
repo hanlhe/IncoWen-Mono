@@ -103,9 +103,9 @@ def main():
         inplace=True,
     )
 
-    # Scale Han and CJK punctuation outlines around the center of their
-    # full-width cells. Their 1000-unit advances stay unchanged, keeping
-    # terminal columns aligned.
+    # Center Han and CJK punctuation horizontally in their full-width cells.
+    # Scale vertically from the baseline so shrinking the outlines does not
+    # shift their baseline relative to the Latin glyphs. Advances stay fixed.
     cjk_glyph_names = {
         glyph_name
         for cp, glyph_name in base.getBestCmap().items()
@@ -119,7 +119,7 @@ def main():
         hmtx = base["hmtx"].metrics
         em = base["head"].unitsPerEm
         x_offset = (1 - args.cjk_scale_x) * em / 2
-        y_offset = (1 - args.cjk_scale_y) * em / 2
+        y_offset = 0
         vmtx = base["vmtx"].metrics if "vmtx" in base else None
         vertical_origins = {}
         replacements = {}
@@ -389,7 +389,7 @@ def main():
     source_description = (
         f"Latin: Inconsolata 3.100 ({axes_description}); "
         f"CJK: LXGW WenKai Mono Lite {wenkai_style} 1.522 "
-        "(90% outline scale). "
+        "(90% outline scale; vertical scale anchored at baseline). "
         "Release version 4.622."
     )
     names = {
