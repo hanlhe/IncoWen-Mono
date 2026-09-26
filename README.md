@@ -43,13 +43,15 @@ terminal column alignment is preserved.
 
 ## Chinese language metadata
 
-LXGW WenKai Mono Lite's localized font name is Simplified Chinese (`zh-CN`),
-but its OS/2 code-page flags advertise both Simplified Chinese (936) and
-Traditional Chinese (950). The merged fonts preserve the Simplified flag and
-clear the Traditional flag, so font viewers should classify the CJK coverage as
-Simplified Han. This changes classification metadata, not the CJK glyphs.
+The merged fonts mark their design and supported scripts as Latin and
+Simplified Han (`Latn,Hans`) in the OpenType `meta` table. They also set the
+Simplified Chinese OS/2 code-page flag (936) and clear the Traditional Chinese
+flag (950). These fields classify the CJK coverage; they do not change the
+glyph outlines.
 OpenType defines these code-page flags in the
 [OS/2 table specification](https://learn.microsoft.com/en-us/typography/opentype/spec/os2#ulcodepagerange).
+The `dlng` and `slng` tags are described in the
+[OpenType `meta` table specification](https://learn.microsoft.com/en-us/typography/opentype/spec/meta).
 
 ## License
 

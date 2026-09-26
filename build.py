@@ -403,6 +403,9 @@ def main():
     # uses its Simplified Chinese glyph forms, so advertise Simplified only.
     base["OS/2"].ulCodePageRange1 |= 1 << 18
     base["OS/2"].ulCodePageRange1 &= ~(1 << 20)
+    if "meta" in base:
+        base["meta"].data["dlng"] = "Latn,Hans"
+        base["meta"].data["slng"] = "Latn,Hans"
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     base.save(args.output)

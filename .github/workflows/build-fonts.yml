@@ -76,6 +76,8 @@ jobs:
               assert font["hmtx"].metrics[cmap[0x4E2D]][0] == 1000
               assert os2.ulCodePageRange1 & (1 << 18)
               assert not os2.ulCodePageRange1 & (1 << 20)
+              assert font["meta"].data["dlng"] == "Latn,Hans"
+              assert font["meta"].data["slng"] == "Latn,Hans"
               assert any(
                   record.FeatureTag == "dlig"
                   for record in font["GSUB"].table.FeatureList.FeatureRecord
