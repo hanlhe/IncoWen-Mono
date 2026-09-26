@@ -93,7 +93,7 @@ jobs:
           fi
           cd IncoWen-Mono
           zip -r "../$name" \
-            OFL.txt LICENSE-Inconsolata.txt LICENSE-WenKai-Lite.txt \
+            OFL.txt \
             dist/IncoWenMono-Regular.ttf dist/IncoWenMono-Bold.ttf
           echo "name=$name" >> "$GITHUB_OUTPUT"
 

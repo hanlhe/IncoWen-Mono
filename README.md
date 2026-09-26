@@ -59,9 +59,9 @@ commercially, provided you do not sell the font files by themselves, keep the
 copyright and license notices, and release modified font files under OFL 1.1.
 The WenKai source reserves `LXGW` and several Chinese names; this derivative
 uses the distinct family name `IncoWen Mono`. The combined license and notices
-are in [`OFL.txt`](OFL.txt); the original source license copies remain in the
-two `LICENSE-*.txt` files. The build embeds the copyright notice and full OFL
-text in each font's metadata.
+are in [`OFL.txt`](OFL.txt), which includes both upstream copyright and
+reserved-name notices. The build embeds the copyright notice and full OFL text
+in each font's metadata.
 
 See the [official OFL FAQ](https://openfontlicense.org/ofl-faq/) for details.
 
@@ -90,10 +90,9 @@ These static fonts do not need Ghostty `font-variation` settings.
 
 GitHub Actions rebuilds the Regular and Bold TTFs from the pinned sources on
 pushes, pull requests, and manual runs, then uploads a ZIP artifact containing
-the fonts and license files. Pushing a `v*` tag creates a GitHub Release with
+the fonts and `OFL.txt`. Pushing a `v*` tag creates a GitHub Release with
 that ZIP. The first release tag is `v4.622`.
 
 WenKai's combining diacritics, variation sequence data, vertical metrics, and
 OpenType layout tables are retained. Inconsolata's `dlig` feature is merged
-into each style. The source font licenses are `LICENSE-Inconsolata.txt` and
-`LICENSE-WenKai-Lite.txt`.
+into each style.
