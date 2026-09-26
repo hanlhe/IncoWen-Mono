@@ -57,6 +57,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           from fontTools.ttLib import TTFont
+          from fontTools.varLib.instancer import instantiateVariableFont
 
           paths = [
               Path("dist/IncoWenMono-Regular.ttf"),
@@ -82,6 +83,22 @@ jobs:
                   record.FeatureTag == "dlig"
                   for record in font["GSUB"].table.FeatureList.FeatureRecord
               )
+          source_path = Path("../Inconsolata/fonts/variable/Inconsolata[wdth,wght].ttf")
+          for path, axes in zip(
+              paths,
+              ({"wdth": 87.5, "wght": 350}, {"wdth": 90, "wght": 650}),
+          ):
+              source = instantiateVariableFont(
+                  TTFont(source_path), axes, inplace=True
+              )
+              source_name = source.getBestCmap()[0x41]
+              source_glyph = source["glyf"][source_name]
+              source_glyph.recalcBounds(source["glyf"])
+              expected_width = source_glyph.xMax - source_glyph.xMin
+              font = TTFont(path)
+              glyph_name = font.getBestCmap()[0x41]
+              glyph = font["glyf"][glyph_name]
+              assert glyph.xMax - glyph.xMin == expected_width
           assert len(paths) == 2
           PY
 

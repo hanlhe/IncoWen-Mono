@@ -2,7 +2,9 @@
 
 IncoWen Mono combines Inconsolata Latin glyphs with LXGW WenKai Mono Lite
 Chinese glyphs. It provides static Regular and Bold styles. Both styles keep
-the same 500-unit Latin and 1000-unit CJK terminal advances.
+the same 500-unit Latin and 1000-unit CJK terminal advances. Inconsolata's
+instanced Latin outlines keep their requested widths and are centered in the
+500-unit cells without horizontal rescaling.
 
 ## Styles
 

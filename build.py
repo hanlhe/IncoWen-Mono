@@ -141,8 +141,9 @@ def main():
     }
     source_glyph_names = sorted(set(imported_cps.values()))
 
-    # Inconsolata's mapped glyphs have a 438-unit advance. Expand their
-    # outlines to the 500-unit half-width cell used by the CJK mono font.
+    # Inconsolata's condensed instances use a narrower cell than this family's
+    # 500-unit Latin advance. Preserve their outlines and center them within
+    # the fixed cell instead of scaling them back to the default width.
     source_glyph_set = latin.getGlyphSet()
     source_hmtx = latin["hmtx"].metrics
     source_cell = Counter(
@@ -150,7 +151,8 @@ def main():
         for name in source_glyph_names
         if source_hmtx[name][0] > 0
     ).most_common(1)[0][0]
-    scale_x = LATIN_ADVANCE / source_cell
+    scale_x = 1.0
+    latin_x_offset = (LATIN_ADVANCE - source_cell) / 2
     glyf = base["glyf"]
     hmtx = base["hmtx"].metrics
     converted_glyphs = {}
@@ -161,7 +163,7 @@ def main():
             source_glyph_set[source_name].draw(recording_pen)
             pen = TTGlyphPen(None)
             recording_pen.replay(
-                TransformPen(pen, (scale_x, 0, 0, 1, 0, 0))
+                TransformPen(pen, (scale_x, 0, 0, 1, latin_x_offset, 0))
             )
             converted_glyphs[source_name] = pen.glyph()
         return converted_glyphs[source_name]
@@ -194,7 +196,7 @@ def main():
             source_advance, source_lsb = source_hmtx[source_name]
             hmtx[target_name] = (
                 LATIN_ADVANCE if source_advance else 0,
-                round(source_lsb * scale_x),
+                round(source_lsb * scale_x + latin_x_offset),
             )
         else:
             for cp, source_name in items:
@@ -245,7 +247,7 @@ def main():
         source_advance, source_lsb = source_hmtx[source_name]
         hmtx[target_name] = (
             round(source_advance / source_cell) * LATIN_ADVANCE,
-            round(source_lsb * scale_x),
+            round(source_lsb * scale_x + latin_x_offset),
         )
 
     dlig_lookup = deepcopy(source_ligature_lookup)
@@ -300,7 +302,7 @@ def main():
         source_advance, source_lsb = source_hmtx[source_name]
         hmtx[target_name] = (
             LATIN_ADVANCE if source_advance else 0,
-            round(source_lsb * scale_x),
+            round(source_lsb * scale_x + latin_x_offset),
         )
 
     # Update cmap tables only for glyphs that needed separate slots. The
@@ -323,7 +325,7 @@ def main():
             source_advance, source_lsb = source_hmtx[source_name]
             base["hmtx"].metrics[glyph_name] = (
                 LATIN_ADVANCE if source_advance else 0,
-                round(source_lsb * scale_x),
+                round(source_lsb * scale_x + latin_x_offset),
             )
         if "vmtx" in base and glyph_name not in base["vmtx"].metrics:
             glyph = glyf[glyph_name]
@@ -415,8 +417,9 @@ def main():
         f"codepoints; added {len(appended_source_names)} Latin and "
         f"{len(ligature_order)} ligature glyphs; added the dlig feature. "
         f"Inconsolata axes are {latin_axes}; style is {args.style}. "
-        f"Latin advances are {LATIN_ADVANCE}/{base['head'].unitsPerEm} em "
-        f"(scaled {scale_x:.3f}x horizontally). "
+        f"Latin advances are {LATIN_ADVANCE}/{base['head'].unitsPerEm} em; "
+        f"source outlines are unscaled and centered with "
+        f"{latin_x_offset:.1f} units of added left sidebearing. "
         f"Scaled {cjk_scaled} Chinese glyph outlines "
         f"({args.cjk_scale_x:.3f}x horizontally and "
         f"{args.cjk_scale_y:.3f}x vertically); their advances are unchanged."
