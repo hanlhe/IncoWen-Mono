@@ -17,6 +17,8 @@
         --line: #dcd9ce;
         --accent: #a33f2f;
         --sample-size: 24px;
+        --quote-size: 16px;
+        --translation-size: 12px;
         font-family: "WenSolata Mono", monospace;
         font-synthesis: none;
       }
@@ -200,14 +202,14 @@
 
       .quote-zh {
         margin: 0 0 11px;
-        font-size: 16px;
+        font-size: var(--quote-size);
         line-height: 1.9;
       }
 
       .quote-en {
         margin: 0;
         color: #626b61;
-        font-size: 12px;
+        font-size: var(--translation-size);
         line-height: 1.8;
       }
 
@@ -419,6 +421,8 @@
       const sizeOutput = document.querySelector("#sample-size-value");
       slider.addEventListener("input", () => {
         document.documentElement.style.setProperty("--sample-size", `${slider.value}px`);
+        document.documentElement.style.setProperty("--quote-size", `${Math.round(slider.value * 2 / 3)}px`);
+        document.documentElement.style.setProperty("--translation-size", `${Math.round(slider.value / 2)}px`);
         sizeOutput.value = `${slider.value} px`;
         sizeOutput.textContent = `${slider.value} px`;
       });
