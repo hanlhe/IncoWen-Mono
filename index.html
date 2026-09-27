@@ -158,7 +158,7 @@
 
       .specimens {
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: minmax(0, 1fr);
         gap: 14px;
       }
 
@@ -185,7 +185,6 @@
       .weight-label { margin: 0; }
       .weight-number { color: var(--muted); font-size: 11px; }
       .comparison {
-        min-height: 3.4em;
         margin: 19px 0 21px;
         font-size: var(--sample-size);
         letter-spacing: -0.035em;
@@ -285,9 +284,7 @@
         .hero { grid-template-columns: 1fr; gap: 28px; }
         .hero-aside { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 0; border: 0; }
         .hero-aside p { margin: 0; }
-        .specimens { grid-template-columns: 1fr; }
         .specimen { padding: 20px; }
-        .comparison { min-height: 0; }
         .usage { grid-template-columns: 1fr; gap: 22px; }
       }
 
